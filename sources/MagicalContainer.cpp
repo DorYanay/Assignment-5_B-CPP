@@ -18,39 +18,52 @@ bool isPrime(int num)
 }
 namespace ariel
 {
-    // MAGICAL CONTAINER
-    //
-    //
-    //
-    //
-    //
-    void MagicalContainer::addElement(int Element)
+    /*______
+    ( _____ )(  ___  )(  ____ \\__   __/(  ____ \(  ___  )( \        (  ____ \(  ___  )( (    /|\__   __/(  ___  )\__   __/( (    /|(  ____ \(  ____ )
+    | () () || (   ) || (    \/   ) (   | (    \/| (   ) || (        | (    \/| (   ) ||  \  ( |   ) (   | (   ) |   ) (   |  \  ( || (    \/| (    )|
+    | || || || (___) || |         | |   | |      | (___) || |        | |      | |   | ||   \ | |   | |   | (___) |   | |   |   \ | || (__    | (____)|
+    | |(_)| ||  ___  || | ____    | |   | |      |  ___  || |        | |      | |   | || (\ \) |   | |   |  ___  |   | |   | (\ \) ||  __)   |     __)
+    | |   | || (   ) || | \_  )   | |   | |      | (   ) || |        | |      | |   | || | \   |   | |   | (   ) |   | |   | | \   || (      | (\ (
+    | )   ( || )   ( || (___) |___) (___| (____/\| )   ( || (____/\  | (____/\| (___) || )  \  |   | |   | )   ( |___) (___| )  \  || (____/\| ) \ \__
+    |/     \||/     \|(_______)\_______/(_______/|/     \|(_______/  (_______/(_______)|/    )_)   )_(   |/     \|\_______/|/    )_)(_______/|/   \__/
+    */
+    void MagicalContainer::addElement(int element)
     {
-        // Implementation goes here
+        container.push_back(element);
+        std::sort(container.begin(), container.end());
+        if (isPrime(element))
+        {
+            primes.push_back(&container.back());
+        }
     }
 
-    void MagicalContainer::removeElement(int Element)
+    void MagicalContainer::removeElement(int element)
     {
-        // Implementation goes here
+        auto it = std::find(container.begin(), container.end(), element);
+        if (it == this->container.end())
+            throw runtime_error("OUT OF BOUNDS\n");
+        container.erase(it);
+        primes.erase(std::remove(primes.begin(), primes.end(), &(*it)), primes.end());
     }
 
     int MagicalContainer::size()
     {
-        // Implementation goes here
-        return 0;
+
+        return container.size();
     }
-    // AscendingIterator
-    //
-    //
-    //
-    //
-    //
-    MagicalContainer::AscendingIterator::AscendingIterator(MagicalContainer &container) : container(container)
+    /*(  ___  )(  ____ \(  ____ \(  ____ \( (    /|(  __  \ \__   __/( (    /|(  ____ \  \__   __/\__   __/(  ____ \(  ____ )(  ___  )\__   __/(  ___  )(  ____ )
+      | (   ) || (    \/| (    \/| (    \/|  \  ( || (  \  )   ) (   |  \  ( || (    \/     ) (      ) (   | (    \/| (    )|| (   ) |   ) (   | (   ) || (    )|
+      | (___) || (_____ | |      | (__    |   \ | || |   ) |   | |   |   \ | || |           | |      | |   | (__    | (____)|| (___) |   | |   | |   | || (____)|
+      |  ___  |(_____  )| |      |  __)   | (\ \) || |   | |   | |   | (\ \) || | ____      | |      | |   |  __)   |     __)|  ___  |   | |   | |   | ||     __)
+      | (   ) |      ) || |      | (      | | \   || |   ) |   | |   | | \   || | \_  )     | |      | |   | (      | (\ (   | (   ) |   | |   | |   | || (\ (
+      | )   ( |/\____) || (____/\| (____/\| )  \  || (__/  )___) (___| )  \  || (___) |  ___) (___   | |   | (____/\| ) \ \__| )   ( |   | |   | (___) || ) \ \__
+      |/     \|\_______)(_______/(_______/|/    )_)(______/ \_______/|/    )_)(_______)  \_______/   )_(   (_______/|/   \__/|/     \|   )_(   (_______)|/   \__/*/
+
+    MagicalContainer::AscendingIterator::AscendingIterator(MagicalContainer &AscContainer) : AscContainer(AscContainer), curr(AscContainer.container.begin())
     {
-        // Constructor Logic
     }
 
-    MagicalContainer::AscendingIterator::AscendingIterator(const AscendingIterator &other) : container(other.container)
+    MagicalContainer::AscendingIterator::AscendingIterator(const AscendingIterator &other) : AscContainer(other.AscContainer)
     {
         // other initialization code
     }
@@ -58,25 +71,6 @@ namespace ariel
     {
         // Do nothing - we can't reassign the reference member "container"
         return *this;
-    }
-    bool MagicalContainer::AscendingIterator::operator==(const AscendingIterator &other) const
-    {
-        return false;
-    }
-
-    bool MagicalContainer::AscendingIterator::operator!=(const AscendingIterator &other) const
-    {
-        return false;
-    }
-
-    bool MagicalContainer::AscendingIterator::operator<(const AscendingIterator &other) const
-    {
-        return false;
-    }
-
-    bool MagicalContainer::AscendingIterator::operator>(const AscendingIterator &other) const
-    {
-        return false;
     }
 
     int MagicalContainer::AscendingIterator::operator*()
@@ -98,18 +92,20 @@ namespace ariel
     {
         return *this; // Returns *this as a dummy value
     }
-    // SideCrossIterator
-    //
-    //
-    //
-    //
-    //
-    MagicalContainer::SideCrossIterator::SideCrossIterator(MagicalContainer &container) : container(container)
+    /*
+    (  ____ \\__   __/(  __  \ (  ____ \(  ____ \(  ____ )(  ___  )(  ____ \(  ____ \  \__   __/\__   __/(  ____ \(  ____ )(  ___  )\__   __/(  ___  )(  ____ )
+    | (    \/   ) (   | (  \  )| (    \/| (    \/| (    )|| (   ) || (    \/| (    \/     ) (      ) (   | (    \/| (    )|| (   ) |   ) (   | (   ) || (    )|
+    | (_____    | |   | |   ) || (__    | |      | (____)|| |   | || (_____ | (_____      | |      | |   | (__    | (____)|| (___) |   | |   | |   | || (____)|
+    (_____  )   | |   | |   | ||  __)   | |      |     __)| |   | |(_____  )(_____  )     | |      | |   |  __)   |     __)|  ___  |   | |   | |   | ||     __)
+          ) |   | |   | |   ) || (      | |      | (\ (   | |   | |      ) |      ) |     | |      | |   | (      | (\ (   | (   ) |   | |   | |   | || (\ (
+    /\____) |___) (___| (__/  )| (____/\| (____/\| ) \ \__| (___) |/\____) |/\____) |  ___) (___   | |   | (____/\| ) \ \__| )   ( |   | |   | (___) || ) \ \__
+    \_______)\_______/(______/ (_______/(_______/|/   \__/(_______)\_______)\_______)  \_______/   )_(   (_______/|/   \__/|/     \|   )_(   (_______)|/   \__/*/
+    MagicalContainer::SideCrossIterator::SideCrossIterator(MagicalContainer &SideCrossCont) : SideCrossCont(SideCrossCont)
     {
         // other initialization code
     }
 
-    MagicalContainer::SideCrossIterator::SideCrossIterator(const SideCrossIterator &other) : container(other.container)
+    MagicalContainer::SideCrossIterator::SideCrossIterator(const SideCrossIterator &other) : SideCrossCont(other.SideCrossCont)
     {
         // other initialization code
     }
@@ -117,25 +113,6 @@ namespace ariel
     {
         // Do nothing - we can't reassign the reference member "container"
         return *this;
-    }
-    bool MagicalContainer::SideCrossIterator::operator==(const SideCrossIterator &other) const
-    {
-        return false;
-    }
-
-    bool MagicalContainer::SideCrossIterator::operator!=(const SideCrossIterator &other) const
-    {
-        return false;
-    }
-
-    bool MagicalContainer::SideCrossIterator::operator<(const SideCrossIterator &other) const
-    {
-        return false;
-    }
-
-    bool MagicalContainer::SideCrossIterator::operator>(const SideCrossIterator &other) const
-    {
-        return false;
     }
 
     int &MagicalContainer::SideCrossIterator::operator*()
@@ -158,18 +135,22 @@ namespace ariel
     {
         return *this; // Returns *this as a dummy value
     }
-    // Prime Iterator
-    //
-    //
-    //
-    //
-    //
-    MagicalContainer::PrimeIterator::PrimeIterator(MagicalContainer &container) : container(container)
+    /*
+     _______  _______ _________ _______  _______   __________________ _______  _______  _______ _________ _______  _______
+    (  ____ )(  ____ )\__   __/(       )(  ____ \  \__   __/\__   __/(  ____ \(  ____ )(  ___  )\__   __/(  ___  )(  ____ )
+    | (    )|| (    )|   ) (   | () () || (    \/     ) (      ) (   | (    \/| (    )|| (   ) |   ) (   | (   ) || (    )|
+    | (____)|| (____)|   | |   | || || || (__         | |      | |   | (__    | (____)|| (___) |   | |   | |   | || (____)|
+    |  _____)|     __)   | |   | |(_)| ||  __)        | |      | |   |  __)   |     __)|  ___  |   | |   | |   | ||     __)
+    | (      | (\ (      | |   | |   | || (           | |      | |   | (      | (\ (   | (   ) |   | |   | |   | || (\ (
+    | )      | ) \ \_____) (___| )   ( || (____/\  ___) (___   | |   | (____/\| ) \ \__| )   ( |   | |   | (___) || ) \ \__
+    |/       |/   \__/\_______/|/     \|(_______/  \_______/   )_(   (_______/|/   \__/|/     \|   )_(   (_______)|/   \__/
+                                                                                                                       */
+    MagicalContainer::PrimeIterator::PrimeIterator(MagicalContainer &PrimeCont) : PrimeCont(PrimeCont)
     {
         // other initialization code
     }
 
-    MagicalContainer::PrimeIterator::PrimeIterator(const PrimeIterator &other) : container(other.container)
+    MagicalContainer::PrimeIterator::PrimeIterator(const PrimeIterator &other) : PrimeCont(other.PrimeCont)
     {
         // other initialization code
     }
@@ -177,25 +158,6 @@ namespace ariel
     {
         // Do nothing - we can't reassign the reference member "container"
         return *this;
-    }
-    bool MagicalContainer::PrimeIterator::operator==(const PrimeIterator &other) const
-    {
-        return false;
-    }
-
-    bool MagicalContainer::PrimeIterator::operator!=(const PrimeIterator &other) const
-    {
-        return false;
-    }
-
-    bool MagicalContainer::PrimeIterator::operator<(const PrimeIterator &other) const
-    {
-        return false;
-    }
-
-    bool MagicalContainer::PrimeIterator::operator>(const PrimeIterator &other) const
-    {
-        return false;
     }
 
     int &MagicalContainer::PrimeIterator::operator*()

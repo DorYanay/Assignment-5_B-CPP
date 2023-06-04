@@ -14,10 +14,10 @@ namespace ariel
     class MagicalContainer
     {
     private:
-        multiset<int> AscendingContainer;
-        vector<int> PrimeList;
-        vector<int> MagicList;
-        vector<int> CrossList;
+        vector<int> container;
+        vector<int *> sorted;
+        vector<int *> primes;
+        vector<int *> sidecross;
 
     public:
         void addElement(int Element);
@@ -26,7 +26,8 @@ namespace ariel
         class AscendingIterator
         {
         private:
-            MagicalContainer &container;
+            MagicalContainer &AscContainer;
+            vector<int>::iterator curr;
 
         public:
             AscendingIterator(MagicalContainer &);
@@ -49,10 +50,10 @@ namespace ariel
         class SideCrossIterator
         {
         private:
-            MagicalContainer &container;
+            MagicalContainer &SideCrossCont;
 
         public:
-            SideCrossIterator(MagicalContainer &container);
+            SideCrossIterator(MagicalContainer &SideCrossCont);
             ~SideCrossIterator() = default;
             SideCrossIterator(const SideCrossIterator &other);
             SideCrossIterator &operator=(const SideCrossIterator &other);                      // Copy assignment operator
@@ -73,10 +74,10 @@ namespace ariel
         class PrimeIterator
         {
         private:
-            MagicalContainer &container;
+            MagicalContainer &PrimeCont;
 
         public:
-            PrimeIterator(MagicalContainer &container);
+            PrimeIterator(MagicalContainer &PrimeCont);
             ~PrimeIterator() = default;
             PrimeIterator(const PrimeIterator &other);
             PrimeIterator &operator=(const PrimeIterator &other);                      // Copy assignment operator
