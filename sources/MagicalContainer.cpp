@@ -29,39 +29,32 @@ namespace ariel
     }
     void MagicalContainer::iterfix()
     {
-        // Sorted
+        // Clear the iterators
         sorted.clear();
-        for (auto it = container.begin(); it != container.end(); ++it)
-        {
-            sorted.push_back(&(*it));
-        }
-
-        // Prime
         primes.clear();
-        for (auto it = container.begin(); it != container.end(); ++it)
+        sidecross.clear();
+
+        // Reserve memory
+        sorted.reserve(container.size());
+        primes.reserve(container.size());
+        sidecross.reserve(container.size());
+
+        for (auto iter = container.begin(); iter != container.end(); ++iter)
         {
-            if (isPrime(*it))
+            sorted.emplace_back(&(*iter));
+            if (isPrime(*iter))
             {
-                primes.push_back(&(*it));
+                primes.emplace_back(&(*iter));
             }
         }
 
-        // Cross
-        sidecross.clear();
-        auto start = container.begin();
-        auto end = container.end() - 1;
-
-        while (start < end)
+        for (auto start = container.begin(), end = container.end() - 1; start <= end; ++start, --end)
         {
-            sidecross.push_back(&(*start));
-            sidecross.push_back(&(*end));
-            start++;
-            end--;
-        }
-
-        if (start == end) // if container size is odd
-        {
-            sidecross.push_back(&(*start));
+            sidecross.emplace_back(&(*start));
+            if (start != end)
+            {
+                sidecross.emplace_back(&(*end));
+            }
         }
     }
     void MagicalContainer::addElement(int element)
@@ -98,7 +91,7 @@ namespace ariel
     {
     }
 
-    MagicalContainer::AscendingIterator::AscendingIterator(const AscendingIterator &other) : AscContainer(other.AscContainer)
+    MagicalContainer::AscendingIterator::AscendingIterator(const AscendingIterator &other) : AscContainer(other.AscContainer), curr(other.curr), currentIndex(other.currentIndex)
     {
         // other initialization code
     }
