@@ -3,6 +3,7 @@
 #include <string>
 #include <cmath>
 #include <vector>
+#include <algorithm>
 #include <iterator>
 using namespace std;
 namespace ariel
@@ -17,12 +18,11 @@ namespace ariel
         vector<int *> sidecross;
 
     public:
-        MagicalContainer() = default;
-        ~MagicalContainer();
-        bool isPrime(int);
         void addElement(int Element);
         void removeElement(int Element);
         int size();
+        bool isPrime(int);
+        void iterfix();
         class AscendingIterator
         {
         private:

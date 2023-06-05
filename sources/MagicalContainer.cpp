@@ -12,11 +12,6 @@ namespace ariel
         | )   ( || )   ( || (___) |___) (___| (____/\| )   ( || (____/\   | (____/\| (___) || )  \  |   | |   | )   ( |___) (___| )  \  || (____/\| ) \ \__
         |/     \||/     \|(_______)\_______/(_______/|/     \|(_______/   (_______/(_______)|/    )_)   )_(   |/     \|\_______/|/    )_)(_______/|/   \__/
         */
-
-    MagicalContainer::~MagicalContainer()
-    {
-        container.clear();
-    }
     bool MagicalContainer::isPrime(int num)
     {
         if (num < 2)
@@ -32,29 +27,57 @@ namespace ariel
         }
         return true;
     }
+    void MagicalContainer::iterfix()
+    {
+        // Sorted
+        sorted.clear();
+        for (auto it = container.begin(); it != container.end(); ++it)
+        {
+            sorted.push_back(&(*it));
+        }
+
+        // Prime
+        primes.clear();
+        for (auto it = container.begin(); it != container.end(); ++it)
+        {
+            if (isPrime(*it))
+            {
+                primes.push_back(&(*it));
+            }
+        }
+
+        // Cross
+        sidecross.clear();
+        auto start = container.begin();
+        auto end = container.end() - 1;
+
+        while (start < end)
+        {
+            sidecross.push_back(&(*start));
+            sidecross.push_back(&(*end));
+            start++;
+            end--;
+        }
+
+        if (start == end) // if container size is odd
+        {
+            sidecross.push_back(&(*start));
+        }
+    }
     void MagicalContainer::addElement(int element)
     {
         container.push_back(element);
         std::sort(container.begin(), container.end());
-        primes.clear();
-        for (auto iter = container.begin(); iter != container.end(); ++iter)
-        {
-            if (isPrime(*iter))
-            {
-                primes.push_back(&(*iter));
-            }
-        }
+        iterfix();
     }
 
     void MagicalContainer::removeElement(int element)
     {
         auto it = std::find(container.begin(), container.end(), element);
         if (it == this->container.end())
-        {
             throw runtime_error("OUT OF BOUNDS\n");
-        }
         container.erase(it);
-        primes.erase(std::remove(primes.begin(), primes.end(), &(*it)), primes.end());
+        iterfix();
     }
 
     int MagicalContainer::size()
@@ -191,7 +214,7 @@ namespace ariel
 
     MagicalContainer::SideCrossIterator &MagicalContainer::SideCrossIterator::operator++()
     {
-        if (curr == SideCrossCont.sorted.end())
+        if (curr == SideCrossCont.sidecross.end())
             throw runtime_error("OUTOFBOUNDS/n");
         ++curr;
         ++currentIndex;
@@ -283,7 +306,7 @@ namespace ariel
 
     MagicalContainer::PrimeIterator &MagicalContainer::PrimeIterator::operator++()
     {
-        if (curr == PrimeCont.sorted.end())
+        if (curr == PrimeCont.primes.end())
             throw runtime_error("OutOfBounds/n");
         ++curr;
         ++currentIndex;
