@@ -1,12 +1,9 @@
 #pragma once
 #include <iostream>
 #include <string>
-#include <map>
 #include <cmath>
 #include <vector>
 #include <iterator>
-#include <set>
-#include <list>
 using namespace std;
 namespace ariel
 {
@@ -20,6 +17,9 @@ namespace ariel
         vector<int *> sidecross;
 
     public:
+        MagicalContainer() = default;
+        ~MagicalContainer();
+        bool isPrime(int);
         void addElement(int Element);
         void removeElement(int Element);
         int size();
@@ -27,10 +27,11 @@ namespace ariel
         {
         private:
             MagicalContainer &AscContainer;
-            vector<int>::iterator curr;
+            vector<int *>::iterator curr;
+            int currentIndex;
 
         public:
-            AscendingIterator(MagicalContainer &);
+            explicit AscendingIterator(MagicalContainer &);
             ~AscendingIterator() = default;
             AscendingIterator(const AscendingIterator &other);
             AscendingIterator &operator=(const AscendingIterator &other);                      // Copy assignment operator
@@ -51,9 +52,11 @@ namespace ariel
         {
         private:
             MagicalContainer &SideCrossCont;
+            vector<int *>::iterator curr;
+            int currentIndex;
 
         public:
-            SideCrossIterator(MagicalContainer &SideCrossCont);
+            explicit SideCrossIterator(MagicalContainer &SideCrossCont);
             ~SideCrossIterator() = default;
             SideCrossIterator(const SideCrossIterator &other);
             SideCrossIterator &operator=(const SideCrossIterator &other);                      // Copy assignment operator
@@ -65,7 +68,7 @@ namespace ariel
             bool operator!=(const SideCrossIterator &other) const;
             bool operator<(const SideCrossIterator &other) const;
             bool operator>(const SideCrossIterator &other) const;
-            int &operator*(); // dereference operator
+            int operator*(); // dereference operator
             SideCrossIterator &operator++();
 
             SideCrossIterator &begin();
@@ -75,9 +78,11 @@ namespace ariel
         {
         private:
             MagicalContainer &PrimeCont;
+            vector<int *>::iterator curr;
+            int currentIndex;
 
         public:
-            PrimeIterator(MagicalContainer &PrimeCont);
+            explicit PrimeIterator(MagicalContainer &PrimeCont);
             ~PrimeIterator() = default;
             PrimeIterator(const PrimeIterator &other);
             PrimeIterator &operator=(const PrimeIterator &other);                      // Copy assignment operator
@@ -89,7 +94,7 @@ namespace ariel
             bool operator!=(const PrimeIterator &other) const;
             bool operator<(const PrimeIterator &other) const;
             bool operator>(const PrimeIterator &other) const;
-            int &operator*(); // dereference operator
+            int operator*(); // dereference operator
             PrimeIterator &operator++();
 
             PrimeIterator &begin();
